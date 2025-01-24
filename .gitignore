@@ -141,4 +141,5 @@ _ttd_log_
 .vscode
 .idea
 .coding-aider-plans
+node_modules
 
