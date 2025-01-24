@@ -1,21 +1,40 @@
-const express = require('express')
-const chalk   = require('chalk')
-const debug   = require('debug')('app')
-const morgan  = require('morgan')
-const path    = require('path')
-const app     = express()
-const port    = 3000
+const express       = require('express')
+const chalk         = require('chalk')
+const debug         = require('debug')('app')
+const morgan        = require('morgan')
+const path          = require('path')
+const products      = require('./data/products.json')
+const productRouter = express.Router()
+
+const app  = express()
+const PORT = process.env.PORT || 3000
 
 app.use(morgan('combined'))
 app.use(express.static(path.join(__dirname, '/public/')))
 
-app.get('/', (req, res) => {
-  res.send('Hello NACC!')
+app.set('views', './src/views')
+app.set('view engine', 'ejs')
+
+productRouter.route('/').get((req, res) => {
+  res.render('products',
+    products,
+  )
 })
 
-app.listen(port, () => {
-  console.log('Listening on port ' + port)
-  console.log('Listening on port ' + chalk.green(port))
-  console.log(chalk.blue('Listening on port ' + port))
-  debug(chalk.blue('Listening on port ' + port))
+productRouter.route('/1').get((req, res) => {
+  res.send('Hello NACC2! I am product 1')
+})
+
+app.use('/products', productRouter)
+
+app.get('/', (req, res) => {
+  // res.send('Hello NACC2!')
+  res.render('index', { username: 'SUDEE SEDUM', data: ['a', 'b', 'c'] })
+})
+
+app.listen(PORT, () => {
+  console.log('Listening on PORT ' + PORT)
+  console.log('Listening on PORT ' + chalk.green(PORT))
+  console.log(chalk.blue('Listening on PORT ' + PORT))
+  debug(chalk.blue('Listening on PORT ' + PORT))
 })
